@@ -11,12 +11,17 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.google.android.material.snackbar.Snackbar
 import com.me.moviesapp.R
 import com.me.moviesapp.data.*
+import com.me.moviesapp.data.Entity.LatestMoviesEntity
+import com.me.moviesapp.data.Entity.PopularMoviesEntity
 import com.me.moviesapp.presentation.ViewModels.LatestViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observer
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LatestMovies : AppCompatActivity() {
@@ -26,6 +31,7 @@ class LatestMovies : AppCompatActivity() {
     lateinit var latestViewModel: LatestViewModel
     var movieslist: MutableList<MoviesModel> = ArrayList()
     lateinit var coordinatorLayout: CoordinatorLayout
+    lateinit var db: Database
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +42,12 @@ class LatestMovies : AppCompatActivity() {
     }
 
     private fun initView() {
+
+        db = Room.databaseBuilder(
+            applicationContext,
+            Database::class.java, "latestMovies"
+        ).build()
+
         recyclerView = findViewById(R.id.recyclerView)
         progressBar = findViewById(R.id.progressBar)
         coordinatorLayout = findViewById(R.id.rootLayout)
@@ -61,15 +73,15 @@ class LatestMovies : AppCompatActivity() {
                 Status.ERROR -> {
                     //Handle Error
                     progressBar.visibility = View.GONE
-                    SetupSnackbar()
+                    SetupSnackbar(it.message)
                 }
             }
         })
     }
 
-    private fun SetupSnackbar(){
+    private fun SetupSnackbar(message: CharSequence?){
 
-        var snackbar : Snackbar = Snackbar.make(coordinatorLayout,"Error Occured Please Try Again", Snackbar.LENGTH_INDEFINITE)
+        var snackbar : Snackbar = Snackbar.make(coordinatorLayout,message!!, Snackbar.LENGTH_INDEFINITE)
             .setAction("Retry",View.OnClickListener { latestViewModel.fetchMovies(this) })
         snackbar.show()
 
@@ -89,5 +101,13 @@ class LatestMovies : AppCompatActivity() {
         movieslist.add(moviesModel)
         moviesAdapter.addData(movieslist)
         moviesAdapter.notifyDataSetChanged()
+
+        var movieList: ArrayList<LatestMoviesEntity>  = arrayListOf()
+        GlobalScope.launch {
+                val latestMoviesEntity = LatestMoviesEntity(moviesModel.id,moviesModel.title,moviesModel.overview,moviesModel.voteAverage,moviesModel.posterPath,moviesModel.releaseDate)
+                movieList.add(latestMoviesEntity)
+                db.latestMovieDao().insertAll(movieList)
+            }
+
     }
 }

@@ -4,7 +4,10 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.me.moviesapp.data.Entity.PopularMoviesEntity
+import com.me.moviesapp.data.Entity.UpcomingMoviesEntity
 import com.me.moviesapp.data.MainRepository
+import com.me.moviesapp.data.MoviesModel
 import com.me.moviesapp.data.MoviesResult
 import com.me.moviesapp.data.Resource
 import com.me.moviesapp.presentation.NetworkUtil
@@ -19,17 +22,21 @@ class PopularViewModel @Inject constructor(var mainRepository: MainRepository) :
     var compositeDisposable: CompositeDisposable = CompositeDisposable()
     private val popularMovies = MutableLiveData<Resource<MoviesResult>>()
 
-
-
-
-
-
     fun fetchMovies(context: Context) {
-
         var networkUtil = NetworkUtil()
         var isAvailable = networkUtil.isNetworkAvailable(context)
         if (!isAvailable) {
             popularMovies.postValue(Resource.error("Network not Available",null))
+            compositeDisposable.add(
+                mainRepository.getLocalPopularMovies(context)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ localResults: List<PopularMoviesEntity> -> HandLocalResults(localResults)
+
+                    }, {t: Throwable -> this.HandleError(t)
+
+                    })
+            )
             return
         }
 
@@ -67,6 +74,17 @@ class PopularViewModel @Inject constructor(var mainRepository: MainRepository) :
 
     private fun HandleError(t: Throwable) {
         popularMovies.postValue(Resource.error(t.localizedMessage, null))
+    }
+
+    fun HandLocalResults(localResults: List<PopularMoviesEntity>) {
+        var moviesList: MutableList<MoviesModel> = arrayListOf()
+        for (movieEntity in localResults){
+            var movieModel = MoviesModel(movieEntity.id,movieEntity.title,movieEntity.overview,movieEntity.voteAvearge,movieEntity.posterPath,movieEntity.releaseDate)
+            moviesList.add(movieModel)
+        }
+        var movieResult = MoviesResult(0,0, moviesList as ArrayList<MoviesModel>)
+
+        popularMovies.postValue(Resource.success(movieResult))
     }
 
     override fun onCleared() {

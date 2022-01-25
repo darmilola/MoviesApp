@@ -1,6 +1,6 @@
 package com.me.moviesapp.data
 
-data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
+data class Resource<out T>(val status: Status, val data: T?, val message: CharSequence?) {
 
     companion object {
 

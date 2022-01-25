@@ -10,12 +10,17 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.google.android.material.snackbar.Snackbar
 import com.me.moviesapp.R
 import com.me.moviesapp.data.*
+import com.me.moviesapp.data.Entity.PopularMoviesEntity
+import com.me.moviesapp.data.Entity.UpcomingMoviesEntity
 import com.me.moviesapp.presentation.ViewModels.LatestViewModel
 import com.me.moviesapp.presentation.ViewModels.PopularViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PopularMovies : AppCompatActivity() {
@@ -26,6 +31,7 @@ class PopularMovies : AppCompatActivity() {
     var totalPageCount: Int = 0
     var currentPage: Int  = 0
     lateinit var coordinatorLayout: CoordinatorLayout
+    lateinit var db: Database
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +42,12 @@ class PopularMovies : AppCompatActivity() {
     }
 
     private fun initView() {
+
+        db = Room.databaseBuilder(
+            applicationContext,
+            Database::class.java, "popularMovies"
+        ).build()
+
         recyclerView = findViewById(R.id.recyclerView)
         progressBar = findViewById(R.id.progressBar)
         coordinatorLayout = findViewById(R.id.rootLayout)
@@ -73,15 +85,15 @@ class PopularMovies : AppCompatActivity() {
                 Status.ERROR -> {
                     //Handle Error
                     progressBar.visibility = View.GONE
-                    SetupSnackbar()
+                    SetupSnackbar(it.message)
                 }
             }
         })
     }
 
-    private fun SetupSnackbar(){
+    private fun SetupSnackbar(message: CharSequence?){
 
-        var snackbar : Snackbar = Snackbar.make(coordinatorLayout,"Error Occurred Please Try Again", Snackbar.LENGTH_INDEFINITE)
+        var snackbar : Snackbar = Snackbar.make(coordinatorLayout,message!!, Snackbar.LENGTH_INDEFINITE)
             .setAction("Retry",View.OnClickListener { popularViewModel.fetchMovies(this) })
         snackbar.show()
 
@@ -100,5 +112,16 @@ class PopularMovies : AppCompatActivity() {
         currentPage = moviesResult.currentPage
         moviesAdapter.addData(moviesResult.data)
         moviesAdapter.notifyDataSetChanged()
+
+        var movieList: ArrayList<PopularMoviesEntity>  = arrayListOf()
+        var movieModels = moviesResult.data
+
+        GlobalScope.launch {
+            for(movieModel in movieModels){
+                val popularMoviesEntity = PopularMoviesEntity(movieModel.id,movieModel.title,movieModel.overview,movieModel.voteAverage,movieModel.posterPath,movieModel.releaseDate)
+                movieList.add(popularMoviesEntity)
+            }
+            db.popularMovieDao().insertAll(movieList)
+        }
     }
 }

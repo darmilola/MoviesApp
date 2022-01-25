@@ -2,9 +2,10 @@ package com.me.moviesapp.data
 
 import android.content.Context
 import androidx.room.Room
+import com.me.moviesapp.data.Entity.LatestMoviesEntity
+import com.me.moviesapp.data.Entity.PopularMoviesEntity
 import com.me.moviesapp.data.Entity.UpcomingMoviesEntity
 import io.reactivex.Observable
-import kotlinx.coroutines.*
 
 class MainRepository(private val apiHelper: ApiHelper) {
 
@@ -32,24 +33,31 @@ class MainRepository(private val apiHelper: ApiHelper) {
         return apiHelper.getMorePopularMovies(pageNumber)
     }
 
-    fun getLocalUpcomingMovies(context: Context) {
-        GlobalScope.launch(Dispatchers.Main) {
-            val result = withContext(Dispatchers.Default) {
-                performGetRequest(context)
-            }
-        }
-    }
-
-
-    fun performGetRequest(context: Context) : Observable<List<UpcomingMoviesEntity>> {
+    fun getLocalUpcomingMovies(context: Context): Observable<List<UpcomingMoviesEntity>> {
         var db: Database = Room.databaseBuilder(
             context,
             Database::class.java, "upcomingMovies"
         ).build()
 
-        var upcomingMoviesEntity =  db.upcomingMovieDao().getAll()
-        return upcomingMoviesEntity
+        return db.upcomingMovieDao().getAll()
     }
 
+    fun getLocalLatestMovies(context: Context): Observable<List<LatestMoviesEntity>> {
+        var db: Database = Room.databaseBuilder(
+            context,
+            Database::class.java, "latestMovies"
+        ).build()
+
+        return db.latestMovieDao().getAll()
+    }
+
+    fun getLocalPopularMovies(context: Context): Observable<List<PopularMoviesEntity>> {
+        var db: Database = Room.databaseBuilder(
+            context,
+            Database::class.java, "popularMovies"
+        ).build()
+
+        return db.popularMovieDao().getAll()
+    }
 
 }

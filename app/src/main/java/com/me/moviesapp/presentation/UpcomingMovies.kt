@@ -85,15 +85,15 @@ class UpcomingMovies : AppCompatActivity() {
                 Status.ERROR -> {
                     //Handle Error
                     progressBar.visibility = View.GONE
-                    SetupSnackbar()
+                    SetupSnackbar(it.message)
                 }
             }
         })
     }
 
-    private fun SetupSnackbar(){
+    private fun SetupSnackbar(message: CharSequence?){
 
-        var snackbar : Snackbar = Snackbar.make(coordinatorLayout,"Error Occured Please Try Again", Snackbar.LENGTH_INDEFINITE)
+        var snackbar : Snackbar = Snackbar.make(coordinatorLayout,message!!, Snackbar.LENGTH_INDEFINITE)
             .setAction("Retry",View.OnClickListener { upcomingViewModel.fetchMovies(this) })
              snackbar.show()
 
@@ -123,7 +123,7 @@ class UpcomingMovies : AppCompatActivity() {
                 val upcomingMoviesEntity = UpcomingMoviesEntity(movieModel.id,movieModel.title,movieModel.overview,movieModel.voteAverage,movieModel.posterPath,movieModel.releaseDate)
                 movieList.add(upcomingMoviesEntity)
             }
-            if(currentPage < 2) db.upcomingMovieDao().insertAll(movieList)
+             db.upcomingMovieDao().insertAll(movieList)
 
         }
     }
