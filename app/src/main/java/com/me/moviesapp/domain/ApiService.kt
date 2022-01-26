@@ -23,7 +23,7 @@ interface ApiService {
     @GET("movie/latest?api_key=069577edacb3926634ef70a8fe6e91a0")
     fun getMoreLatestMovies(@Query("page") page: Int): Observable<MoviesModel?>
 
-    @GET("movie/upcoming?api_key=069577edacb3926634ef70a8fe6e91a0&page=")
+    @GET("movie/upcoming?api_key=069577edacb3926634ef70a8fe6e91a0")
     fun getMoreUpcomingMovies(@Query("page") page: Int): Observable<MoviesResult?>
 
     @GET("movie/popular?api_key=069577edacb3926634ef70a8fe6e91a0")
