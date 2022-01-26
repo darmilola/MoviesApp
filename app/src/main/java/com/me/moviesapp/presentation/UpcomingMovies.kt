@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,8 +13,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.me.moviesapp.R
 import com.me.moviesapp.data.*
 import com.me.moviesapp.data.Database.Database
-import com.me.moviesapp.data.Database.LatestDatabase
-import com.me.moviesapp.data.Database.UpcomingDatabase
 import com.me.moviesapp.data.Entity.UpcomingMoviesEntity
 import com.me.moviesapp.presentation.ViewModels.UpcomingViewModel
 import dagger.hilt.android.AndroidEntryPoint

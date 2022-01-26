@@ -1,11 +1,7 @@
 package com.me.moviesapp.data
 
 import android.content.Context
-import androidx.room.Database
 import androidx.room.Room
-import com.me.moviesapp.data.Database.LatestDatabase
-import com.me.moviesapp.data.Database.PopularDatabase
-import com.me.moviesapp.data.Database.UpcomingDatabase
 import com.me.moviesapp.data.Entity.LatestMoviesEntity
 import com.me.moviesapp.data.Entity.PopularMoviesEntity
 import com.me.moviesapp.data.Entity.UpcomingMoviesEntity

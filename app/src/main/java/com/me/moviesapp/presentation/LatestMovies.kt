@@ -14,8 +14,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.me.moviesapp.R
 import com.me.moviesapp.data.*
 import com.me.moviesapp.data.Database.Database
-import com.me.moviesapp.data.Database.LatestDatabase
-import com.me.moviesapp.data.Database.UpcomingDatabase
 import com.me.moviesapp.data.Entity.LatestMoviesEntity
 import com.me.moviesapp.presentation.ViewModels.LatestViewModel
 import dagger.hilt.android.AndroidEntryPoint

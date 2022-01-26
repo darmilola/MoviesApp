@@ -7,9 +7,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.me.moviesapp.MockDataUtil.Companion.mockUpcomingMovieList
 import com.me.moviesapp.data.Dao.UpcomingMoviesDao
 import com.me.moviesapp.data.Database.Database
-import com.me.moviesapp.data.Database.UpcomingDatabase
-import com.me.moviesapp.data.Entity.UpcomingMoviesEntity
-import io.reactivex.schedulers.Schedulers
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.Is
 import org.junit.After

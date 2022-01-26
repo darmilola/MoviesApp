@@ -5,13 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.me.moviesapp.data.Dao.PopularMoviesDao
-import com.me.moviesapp.data.Dao.UpcomingMoviesDao
 import com.me.moviesapp.data.Database.Database
-import com.me.moviesapp.data.Database.PopularDatabase
-import com.me.moviesapp.data.Database.UpcomingDatabase
-import com.me.moviesapp.data.Entity.PopularMoviesEntity
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.Is
 import org.junit.After

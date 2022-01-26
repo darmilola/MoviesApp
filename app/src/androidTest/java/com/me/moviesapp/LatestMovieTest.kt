@@ -6,9 +6,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.me.moviesapp.data.Dao.LatestMovieDao
-import com.me.moviesapp.data.Dao.PopularMoviesDao
 import com.me.moviesapp.data.Database.Database
-import com.me.moviesapp.data.Database.LatestDatabase
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.Is
 import org.junit.After
