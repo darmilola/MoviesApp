@@ -14,9 +14,9 @@ interface UpcomingMoviesDao {
         @Query("SELECT * FROM upcomingMovies")
         fun getAll(): Observable<List<UpcomingMoviesEntity>>
 
+        @Query("SELECT * FROM upcomingMovies")
+        fun getAllTest(): List<UpcomingMoviesEntity>
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         fun insertAll(movies: List<UpcomingMoviesEntity>)
-
-
 }

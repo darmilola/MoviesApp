@@ -2,10 +2,8 @@ package com.me.moviesapp.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,9 +12,11 @@ import androidx.room.Room
 import com.google.android.material.snackbar.Snackbar
 import com.me.moviesapp.R
 import com.me.moviesapp.data.*
+import com.me.moviesapp.data.Database.Database
+import com.me.moviesapp.data.Database.LatestDatabase
+import com.me.moviesapp.data.Database.PopularDatabase
+import com.me.moviesapp.data.Database.UpcomingDatabase
 import com.me.moviesapp.data.Entity.PopularMoviesEntity
-import com.me.moviesapp.data.Entity.UpcomingMoviesEntity
-import com.me.moviesapp.presentation.ViewModels.LatestViewModel
 import com.me.moviesapp.presentation.ViewModels.PopularViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
@@ -85,6 +85,7 @@ class PopularMovies : AppCompatActivity() {
                 Status.ERROR -> {
                     //Handle Error
                     progressBar.visibility = View.GONE
+                    recyclerView.visibility = View.VISIBLE
                     SetupSnackbar(it.message)
                 }
             }
@@ -110,8 +111,14 @@ class PopularMovies : AppCompatActivity() {
     private fun renderList(moviesResult: MoviesResult) {
         totalPageCount = moviesResult.totalPage
         currentPage = moviesResult.currentPage
-        moviesAdapter.addData(moviesResult.data)
-        moviesAdapter.notifyDataSetChanged()
+        var networkUtil = NetworkUtil()
+        var isAvailable = networkUtil.isNetworkAvailable(this)
+        if(!isAvailable && moviesAdapter.getData().size != 0){
+        }
+        else{
+            moviesAdapter.addData(moviesResult.data)
+            moviesAdapter.notifyDataSetChanged()
+        }
 
         var movieList: ArrayList<PopularMoviesEntity>  = arrayListOf()
         var movieModels = moviesResult.data

@@ -5,21 +5,20 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.google.android.material.snackbar.Snackbar
 import com.me.moviesapp.R
 import com.me.moviesapp.data.*
+import com.me.moviesapp.data.Database.Database
+import com.me.moviesapp.data.Database.LatestDatabase
+import com.me.moviesapp.data.Database.UpcomingDatabase
 import com.me.moviesapp.data.Entity.LatestMoviesEntity
-import com.me.moviesapp.data.Entity.PopularMoviesEntity
 import com.me.moviesapp.presentation.ViewModels.LatestViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.Observer
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -44,8 +43,8 @@ class LatestMovies : AppCompatActivity() {
     private fun initView() {
 
         db = Room.databaseBuilder(
-            applicationContext,
-            Database::class.java, "latestMovies"
+            this,
+            com.me.moviesapp.data.Database.Database::class.java, "latestMovies"
         ).build()
 
         recyclerView = findViewById(R.id.recyclerView)
@@ -72,6 +71,7 @@ class LatestMovies : AppCompatActivity() {
                 }
                 Status.ERROR -> {
                     //Handle Error
+                    recyclerView.visibility = View.VISIBLE
                     progressBar.visibility = View.GONE
                     SetupSnackbar(it.message)
                 }
@@ -98,9 +98,17 @@ class LatestMovies : AppCompatActivity() {
     }
 
     private fun renderList(moviesModel: MoviesModel) {
-        movieslist.add(moviesModel)
-        moviesAdapter.addData(movieslist)
-        moviesAdapter.notifyDataSetChanged()
+
+        var networkUtil = NetworkUtil()
+        var isAvailable = networkUtil.isNetworkAvailable(this)
+        if(!isAvailable && moviesAdapter.getData().size != 0){
+            //Check if Network is not available and already loaded from Room
+        }
+        else{
+            movieslist.add(moviesModel)
+            moviesAdapter.addData(movieslist)
+            moviesAdapter.notifyDataSetChanged()
+        }
 
         var movieList: ArrayList<LatestMoviesEntity>  = arrayListOf()
         GlobalScope.launch {

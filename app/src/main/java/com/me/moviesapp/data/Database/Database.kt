@@ -1,4 +1,4 @@
-package com.me.moviesapp.data
+package com.me.moviesapp.data.Database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -9,7 +9,7 @@ import com.me.moviesapp.data.Entity.LatestMoviesEntity
 import com.me.moviesapp.data.Entity.PopularMoviesEntity
 import com.me.moviesapp.data.Entity.UpcomingMoviesEntity
 
-@Database(entities = [LatestMoviesEntity::class,PopularMoviesEntity::class,UpcomingMoviesEntity::class], version = 1)
+@Database(entities = [LatestMoviesEntity::class, PopularMoviesEntity::class, UpcomingMoviesEntity::class], version = 1)
 abstract class Database : RoomDatabase() {
     abstract fun latestMovieDao(): LatestMovieDao
     abstract fun popularMovieDao(): PopularMoviesDao

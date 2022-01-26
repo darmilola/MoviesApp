@@ -1,7 +1,11 @@
 package com.me.moviesapp.data
 
 import android.content.Context
+import androidx.room.Database
 import androidx.room.Room
+import com.me.moviesapp.data.Database.LatestDatabase
+import com.me.moviesapp.data.Database.PopularDatabase
+import com.me.moviesapp.data.Database.UpcomingDatabase
 import com.me.moviesapp.data.Entity.LatestMoviesEntity
 import com.me.moviesapp.data.Entity.PopularMoviesEntity
 import com.me.moviesapp.data.Entity.UpcomingMoviesEntity
@@ -34,27 +38,29 @@ class MainRepository(private val apiHelper: ApiHelper) {
     }
 
     fun getLocalUpcomingMovies(context: Context): Observable<List<UpcomingMoviesEntity>> {
-        var db: Database = Room.databaseBuilder(
-            context,
-            Database::class.java, "upcomingMovies"
-        ).build()
 
+        val db = Room.databaseBuilder(
+            context,
+            com.me.moviesapp.data.Database.Database::class.java, "upcomingMovies"
+        ).build()
         return db.upcomingMovieDao().getAll()
     }
 
     fun getLocalLatestMovies(context: Context): Observable<List<LatestMoviesEntity>> {
-        var db: Database = Room.databaseBuilder(
+
+        val db = Room.databaseBuilder(
             context,
-            Database::class.java, "latestMovies"
+            com.me.moviesapp.data.Database.Database::class.java, "latestMovies"
         ).build()
 
         return db.latestMovieDao().getAll()
     }
 
     fun getLocalPopularMovies(context: Context): Observable<List<PopularMoviesEntity>> {
-        var db: Database = Room.databaseBuilder(
+
+        val db = Room.databaseBuilder(
             context,
-            Database::class.java, "popularMovies"
+            com.me.moviesapp.data.Database.Database::class.java, "popularMovies"
         ).build()
 
         return db.popularMovieDao().getAll()

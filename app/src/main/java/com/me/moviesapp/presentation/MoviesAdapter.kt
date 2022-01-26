@@ -33,6 +33,10 @@ class MoviesAdapter (
         moviesList.addAll(list)
     }
 
+    fun getData(): ArrayList<MoviesModel>  {
+        return moviesList;
+    }
+
     class DataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
          var movieTitle: TextView
          var posterImageView: ImageView

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,9 @@ import androidx.room.Room
 import com.google.android.material.snackbar.Snackbar
 import com.me.moviesapp.R
 import com.me.moviesapp.data.*
+import com.me.moviesapp.data.Database.Database
+import com.me.moviesapp.data.Database.LatestDatabase
+import com.me.moviesapp.data.Database.UpcomingDatabase
 import com.me.moviesapp.data.Entity.UpcomingMoviesEntity
 import com.me.moviesapp.presentation.ViewModels.UpcomingViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,7 +43,7 @@ class UpcomingMovies : AppCompatActivity() {
     }
 
     private fun initView() {
-         db = Room.databaseBuilder(
+        db = Room.databaseBuilder(
             applicationContext,
             Database::class.java, "upcomingMovies"
         ).build()
@@ -84,6 +88,7 @@ class UpcomingMovies : AppCompatActivity() {
                 }
                 Status.ERROR -> {
                     //Handle Error
+                    recyclerView.visibility = View.VISIBLE
                     progressBar.visibility = View.GONE
                     SetupSnackbar(it.message)
                 }
@@ -112,11 +117,16 @@ class UpcomingMovies : AppCompatActivity() {
     }
 
     private fun renderList(moviesModels: ArrayList<MoviesModel>) {
-        moviesAdapter.addData(moviesModels)
-        moviesAdapter.notifyDataSetChanged()
+        var networkUtil = NetworkUtil()
+        var isAvailable = networkUtil.isNetworkAvailable(this)
+        if(!isAvailable && moviesAdapter.getData().size != 0){
+        }
+        else{
+            moviesAdapter.addData(moviesModels)
+            moviesAdapter.notifyDataSetChanged()
+        }
 
-       var movieList: ArrayList<UpcomingMoviesEntity>  = arrayListOf()
-
+        var movieList: ArrayList<UpcomingMoviesEntity>  = arrayListOf()
         GlobalScope.launch {
 
             for(movieModel in moviesModels){
@@ -124,7 +134,6 @@ class UpcomingMovies : AppCompatActivity() {
                 movieList.add(upcomingMoviesEntity)
             }
              db.upcomingMovieDao().insertAll(movieList)
-
         }
     }
 }

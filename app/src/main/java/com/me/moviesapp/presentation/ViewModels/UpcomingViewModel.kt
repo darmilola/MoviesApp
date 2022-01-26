@@ -74,6 +74,7 @@ class  UpcomingViewModel @Inject constructor(var mainRepository: MainRepository)
     }
 
     fun HandLocalResults(localResults: List<UpcomingMoviesEntity>) {
+        println(localResults.toString())
         var moviesList: MutableList<MoviesModel> = arrayListOf()
         for (movieEntity in localResults){
             var movieModel = MoviesModel(movieEntity.id,movieEntity.title,movieEntity.overview,movieEntity.voteAvearge,movieEntity.posterPath,movieEntity.releaseDate)
