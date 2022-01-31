@@ -22,7 +22,9 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:id="@+id/details_image"/>
+        android:id="@+id/details_image"
+        android:scaleType="centerCrop"
+        android:src="@drawable/castle_gf553d474a_640"/>
 
 
      <TextView
