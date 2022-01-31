@@ -1,11 +1,10 @@
-package com.me.moviesapp.presentation.ViewModels
+package com.me.moviesapp.presentation.viewModels
 
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.room.Room
 import com.me.moviesapp.data.*
 import com.me.moviesapp.data.Entity.UpcomingMoviesEntity
 import com.me.moviesapp.presentation.NetworkUtil

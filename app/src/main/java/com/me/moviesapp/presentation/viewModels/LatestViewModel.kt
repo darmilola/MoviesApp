@@ -1,14 +1,12 @@
-package com.me.moviesapp.presentation.ViewModels
+package com.me.moviesapp.presentation.viewModels
 
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.me.moviesapp.data.Entity.LatestMoviesEntity
-import com.me.moviesapp.data.Entity.PopularMoviesEntity
 import com.me.moviesapp.data.MainRepository
 import com.me.moviesapp.data.MoviesModel
-import com.me.moviesapp.data.MoviesResult
 import com.me.moviesapp.data.Resource
 import com.me.moviesapp.presentation.NetworkUtil
 import dagger.hilt.android.lifecycle.HiltViewModel

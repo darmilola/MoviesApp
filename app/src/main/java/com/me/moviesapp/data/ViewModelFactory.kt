@@ -2,9 +2,9 @@ package com.me.moviesapp.data
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.me.moviesapp.presentation.ViewModels.LatestViewModel
-import com.me.moviesapp.presentation.ViewModels.PopularViewModel
-import com.me.moviesapp.presentation.ViewModels.UpcomingViewModel
+import com.me.moviesapp.presentation.viewModels.LatestViewModel
+import com.me.moviesapp.presentation.viewModels.PopularViewModel
+import com.me.moviesapp.presentation.viewModels.UpcomingViewModel
 
 class ViewModelFactory(private val apiHelper: ApiHelper) : ViewModelProvider.Factory {
 
@@ -20,7 +20,5 @@ class ViewModelFactory(private val apiHelper: ApiHelper) : ViewModelProvider.Fac
         }
         throw IllegalArgumentException("Unknown class name")
     }
-
-
 
 }
